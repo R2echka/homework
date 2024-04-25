@@ -1,6 +1,7 @@
 from datetime import datetime as dt
-
-from scr.masks_ import bill_mask, card_mask
+import sys, os
+sys.path.append(os.getcwd())
+from scr.masks import bill_mask, card_mask
 
 
 def mask(info: str) -> str:
