@@ -1,5 +1,6 @@
 from datetime import datetime as dt
-from scr.masks_ import card_mask, bill_mask
+
+from scr.masks_ import bill_mask, card_mask
 
 
 def mask(info: str) -> str:
