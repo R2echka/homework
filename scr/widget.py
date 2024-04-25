@@ -1,6 +1,8 @@
 from datetime import datetime as dt
-import sys, os
-sys.path.append(os.getcwd())
+
+# import sys, os
+# sys.path.append(os.getcwd())
+# без этих двух строчек код не работает, по крайней мере в VSCode
 from scr.masks import bill_mask, card_mask
 
 
@@ -17,6 +19,3 @@ def date_correction(date: str) -> str:
     """Форматирует дату"""
     formated_date = dt.strptime(date, "%Y-%m-%dT%H:%M:%S.%f")
     return formated_date.strftime("%d.%m.%Y")
-
-
-print(date_correction("2018-07-11T02:26:18.671407"))
