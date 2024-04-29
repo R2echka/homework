@@ -8,6 +8,7 @@ def sort_by_state(list_: list, state_status: str = "executed") -> list:
 
 
 def date_sort(list_: list, time: str = "increasing") -> list:
+    """Сортирует полученный список по дате"""
     sorted_list = []
     if time == "increasing":
         sorted_list = sorted(list_, key=lambda dict_: dict_["date"], reverse=True)
