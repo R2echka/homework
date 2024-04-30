@@ -1,6 +1,6 @@
 import pytest
-import sys, os
-sys.path.append(os.getcwd())
+# import sys, os
+# sys.path.append(os.getcwd())
 from scr.masks import card_mask, bill_mask
 
 @pytest.mark.parametrize('card_num, expected', [(7000792289606361, '7000 79** **** 6361'),
