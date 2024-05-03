@@ -89,3 +89,11 @@ def test_filter_by_currency(transactions: list, currency: str, expected: int ) -
 
 def test_transaction_descriptions(transactions: list) -> None:
     assert next((next(transaction_descriptions(transactions))) for _ in range(1)) == 'Перевод организации'
+
+@pytest.mark.parametrize('first, last, expected', [(1, 5, ['0000 0000 0000 0001',
+'0000 0000 0000 0002',
+'0000 0000 0000 0003',
+'0000 0000 0000 0004',
+'0000 0000 0000 0005']), (4129313413480001, 4129313413480002, ['4129 3134 1348 0001', '4129 3134 1348 0002'])])
+def test_card_number_generator(first: int, last: int, expected: str) -> None:
+    assert [_ for _ in card_number_generator(first, last)] == expected
