@@ -1,16 +1,21 @@
-def filter_by_currency(list_: list, currency: str) -> GeneratorExit:
+from typing import Generator
+
+
+def filter_by_currency(list_: list, currency: str) -> Generator[str, None, None]:
+    """Принимает список словарей и возвращает генератор словарей, сортирующий их по валюте"""
     for i in list_:
-        if i['operationAmount']['currency']['code'] == currency.upper():
+        if i["operationAmount"]["currency"]["code"] == currency.upper():
             yield i
 
-def transaction_descriptions(list_:list) -> GeneratorExit:
+
+def transaction_descriptions(list_: list) -> Generator[str, None, None]:
+    """Принимает список словарей и возвращает генератор их описаний"""
     for i in list_:
-        yield i['description']
+        yield i["description"]
 
-def card_number_generator(first: int, last: int) -> GeneratorExit:
-    for i in range(first, last+1):
-        card_num = f'{i:0>16}'
-        yield card_num[:4] + ' ' + card_num[4:8] + ' ' + card_num[8:12] + ' ' + card_num[12:]
 
-for card_number in card_number_generator(1, 10000):
-    print(card_number)
+def card_number_generator(first: int, last: int) -> Generator[str, None, None]:
+    """Генерирует номера карт"""
+    for i in range(first, last + 1):
+        card_num = f"{i:0>16}"
+        yield card_num[:4] + " " + card_num[4:8] + " " + card_num[8:12] + " " + card_num[12:]
