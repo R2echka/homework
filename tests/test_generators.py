@@ -86,3 +86,6 @@ def transactions() -> list:
 @pytest.mark.parametrize('currency, expected', [('USD', 939719570), ('RUB', 873106923)])
 def test_filter_by_currency(transactions: list, currency: str, expected: int ) -> None:
     assert next((next(filter_by_currency(transactions, currency))["id"]) for _ in range(1)) == expected
+
+def test_transaction_descriptions(transactions: list) -> None:
+    assert next((next(transaction_descriptions(transactions))) for _ in range(1)) == 'Перевод организации'
