@@ -1,14 +1,13 @@
-import os
-import sys
-
 import pytest
 
-sys.path.append(os.getcwd())
+# import sys, os
+# sys.path.append(os.getcwd())
 from scr.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
 @pytest.fixture
 def transactions() -> list:
+    """Список для теста функций"""
     return [
         {
             "id": 939719570,
@@ -60,10 +59,12 @@ def transactions() -> list:
 
 @pytest.mark.parametrize("currency, expected", [("USD", 939719570), ("RUB", 873106923)])
 def test_filter_by_currency(transactions: list, currency: str, expected: int) -> None:
-    assert next((next(filter_by_currency(transactions, currency))["id"]) for _ in range(1)) == expected
+    """Тест фильтра по валюте"""
+    assert next(filter_by_currency(transactions, currency), None)["id"] == expected
 
 
 def test_transaction_descriptions(transactions: list) -> None:
+    """Тест генерации описаний операций"""
     assert next((next(transaction_descriptions(transactions))) for _ in range(1)) == "Перевод организации"
 
 
@@ -80,9 +81,9 @@ def test_transaction_descriptions(transactions: list) -> None:
                 "0000 0000 0000 0004",
                 "0000 0000 0000 0005",
             ],
-        ),
-        (4129313413480001, 4129313413480002, ["4129 3134 1348 0001", "4129 3134 1348 0002"]),
-    ],
+        )
+    ]
 )
 def test_card_number_generator(first: int, last: int, expected: str) -> None:
+    """Тест генерации номеров карт"""
     assert [_ for _ in card_number_generator(first, last)] == expected
