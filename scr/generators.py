@@ -1,7 +1,7 @@
 from typing import Generator
 
 
-def filter_by_currency(list_: list, currency: str) -> Generator[str, None, None]:
+def filter_by_currency(list_: list, currency: str) -> Generator[dict, None, None]:
     """Принимает список словарей и возвращает генератор словарей, сортирующий их по валюте"""
     for i in list_:
         if i["operationAmount"]["currency"]["code"] == currency.upper():
