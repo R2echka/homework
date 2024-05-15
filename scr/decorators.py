@@ -1,9 +1,10 @@
-from typing import Any, Callable, Optional
 from functools import wraps
+from typing import Any, Callable, Optional
 
 
 def log(filename: Optional[str] = None) -> Callable:
-    '''Записывает в файл/ выводит в консоль результат выполнения декорируемой функции'''
+    """Записывает в файл/ выводит в консоль результат выполнения декорируемой функции"""
+
     def dec(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> str:
