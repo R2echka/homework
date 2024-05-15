@@ -10,11 +10,11 @@ api_key = os.getenv("API_KEY")
 
 def read_json(filename: str) -> list:
     """Читает переданный json-файл"""
-    file_path = os.path.join('data', filename)
+    file_path = os.path.join("data", filename)
     try:
         with open(file_path, encoding="utf-8") as file:
             data = json.load(file)
-            return data
+            return [data]
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
