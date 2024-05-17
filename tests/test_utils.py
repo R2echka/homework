@@ -1,7 +1,7 @@
 # import os
 # import sys
 # sys.path.append(os.getcwd())
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -21,14 +21,11 @@ def first_operation() -> dict:
     }
 
 
-@patch('builtins.open', create=True)
-def test_read_json(mock_open: Mock) -> None:
+def test_read_json(first_operation: list) -> None:
     "Тест чтения json-файла"
-    with patch('json.load') as mock_load:
-        mock_file = mock_open.return_value.__enter__.return_value
-        mock_json = mock_load.return_value.json.return_value
-        mock_json.return_value = ['test data']
-        assert mock_json() == ['test data']
+    mock = Mock(return_value=first_operation)
+    assert read_json("idk.json") == []
+    assert read_json("data/operations.json")[1] == mock()
 
 
 def test_transaction_sum() -> None:

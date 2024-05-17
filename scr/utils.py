@@ -9,7 +9,7 @@ api_key = os.getenv("API_KEY")
 
 
 def read_json(filename: str) -> list:
-    """Читает переданный json-файл"""
+    """Читает json-файл по переданному пути"""
     try:
         with open(filename, encoding="utf-8") as file:
             data = json.load(file)
@@ -33,6 +33,3 @@ def transaction_sum(transaction: dict) -> float:
         currency = data["Valute"][valute]["Value"]
         amount = float(transaction["operationAmount"]["amount"])
         return float(amount * currency)
-
-
-print(read_json('data/operations.json'))
