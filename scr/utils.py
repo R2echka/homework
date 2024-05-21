@@ -4,8 +4,13 @@ import os
 import requests
 from dotenv import load_dotenv
 
+# import sys, os
+# sys.path.append(os.getcwd())
+from scr.logger import log_setup
+
 load_dotenv()
 api_key = os.getenv("API_KEY")
+logger = log_setup()
 
 
 def read_json(filename: str) -> list:
@@ -14,10 +19,13 @@ def read_json(filename: str) -> list:
         with open(filename, encoding="utf-8") as file:
             data = json.load(file)
             if isinstance(data, list):
+                logger.info("Прменена функция read_json")
                 return data
             else:
+                logger.error("В файле находится не список")
                 return []
     except (FileNotFoundError, json.JSONDecodeError):
+        logger.error("Что-то координально пошло не так")
         return []
 
 
@@ -27,9 +35,11 @@ def transaction_sum(transaction: dict) -> float:
     data = response.json()
     if transaction["operationAmount"]["currency"]["code"] == "RUB":
         amount = float(transaction["operationAmount"]["amount"])
+        logger.info("Применена функция transaction_sum")
         return float(amount)
     else:
         valute = transaction["operationAmount"]["currency"]["code"]
         currency = data["Valute"][valute]["Value"]
         amount = float(transaction["operationAmount"]["amount"])
+        logger.info("Применена функция transaction_sum")
         return float(amount * currency)

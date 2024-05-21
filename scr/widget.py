@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+from typing import Optional
 
 # import sys, os
 # sys.path.append(os.getcwd())
@@ -6,13 +7,19 @@ from datetime import datetime as dt
 from scr.masks import bill_mask, card_mask
 
 
-def mask(info: str) -> str:
+def mask(info: str) -> Optional[str]:
     """Соединение функций масок в одну"""
     if "Счет" in info:
-        return f"Счет {bill_mask(info.split()[-1])}"
+        mask = bill_mask(info.split()[-1])
+        if mask:
+            return f"Счет {mask}"
     else:
         card_info = info.split()
-        return str(" ".join(card_info[:-1]) + " " + card_mask(card_info[-1]))
+        card_number = card_info[-1]
+        mask = card_mask(card_number)
+        if mask:
+            return " ".join(card_info[:-1]) + " " + mask
+    return None
 
 
 def date_correction(date: str) -> str:
