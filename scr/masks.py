@@ -21,7 +21,7 @@ def card_mask(card_num: str) -> Optional[str]:
 
 def bill_mask(bill_num: str) -> Optional[str]:
     """Принимает номер счёта и возвращет его маску"""
-    if len(bill_num) == 21:
+    if len(bill_num) == 20:
         bill_num = str(bill_num)
         mask = "**" + bill_num[-4:]
         logger.info("Применена функция bill_mask")
