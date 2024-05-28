@@ -7,9 +7,9 @@ def find_in_data(data: list, to_find: str) -> list:
     """Принимает список словарей и строку, которую необходимо найти в описании
     и возвращает список словарей, в описании которых есть эта строка"""
     sorted_data = []
-    for _ in data:
-        if re.findall(to_find.lower(), _["description"]) != []:
-            sorted_data.append(_)
+    for operation in data:
+        if re.findall(to_find.lower(), operation["description"].lower()) != []:
+            sorted_data.append(operation)
     return sorted_data
 
 

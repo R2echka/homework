@@ -2,7 +2,7 @@ def sort_by_state(list_: list, state_status: str = "executed") -> list:
     '''Получает список и возвращает список словарей, удовлетворяющих заданному значению "state"'''
     sorted_list = []
     for dict_ in list_:
-        if dict_["state"] == state_status.upper():
+        if 'state' in dict_ and dict_["state"] == state_status.upper():
             sorted_list.append(dict_)
     return sorted_list
 

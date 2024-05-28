@@ -29,17 +29,28 @@ def read_json(filename: str) -> list:
         return []
 
 
-def transaction_sum(transaction: dict) -> float:
+def transaction_sum(transaction: dict, file_type: str) -> float:
     """Принимает транзакцию и возвращает её сумму в рублях"""
     response = requests.get("https://www.cbr-xml-daily.ru/daily_json.js", headers={"apikey": api_key}, timeout=3)
     data = response.json()
-    if transaction["operationAmount"]["currency"]["code"] == "RUB":
-        amount = float(transaction["operationAmount"]["amount"])
-        logger.info("Применена функция transaction_sum")
-        return float(amount)
+    if file_type == 'json':
+        if transaction["operationAmount"]["currency"]["code"] == "RUB":
+            amount = float(transaction["operationAmount"]["amount"])
+            currency = 1.0
+        else:
+            valute = transaction["operationAmount"]["currency"]["code"]
+            currency = data["Valute"][valute]["Value"]
+            amount = float(transaction["operationAmount"]["amount"])
     else:
-        valute = transaction["operationAmount"]["currency"]["code"]
-        currency = data["Valute"][valute]["Value"]
-        amount = float(transaction["operationAmount"]["amount"])
-        logger.info("Применена функция transaction_sum")
-        return float(amount * currency)
+        if transaction["currency_code"] == "RUB":
+            amount = float(transaction["amount"])
+            currency = 1.0
+        else:
+            valute = transaction["currency_code"]
+            if data['Valute'][valute]:
+                currency = data["Valute"][valute]["Value"]
+            else:
+                currency = 'USD'
+            amount = float(transaction["amount"])
+    logger.info("Применена функция transaction_sum")
+    return float(amount * currency)
