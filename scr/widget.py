@@ -22,9 +22,9 @@ def mask(info: str) -> Optional[str]:
     return None
 
 
-def date_correction(date: str, file_type: str) -> str:
+def date_correction(date: str, file_type: str='json') -> str:
     """Форматирует дату"""
-    if file_type == 'json':
+    if file_type == "json":
         formated_date = dt.strptime(date, "%Y-%m-%dT%H:%M:%S.%f")
     else:
         formated_date = dt.strptime(date, "%Y-%m-%dT%H:%M:%SZ")

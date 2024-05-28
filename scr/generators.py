@@ -1,14 +1,14 @@
 from typing import Generator
 
 
-def filter_by_currency(list_: list, currency: str, file_type: str) -> Generator[dict, None, None]:
+def filter_by_currency(list_: list, currency: str, file_type: str='json') -> Generator[dict, None, None]:
     """Принимает список словарей и возвращает генератор словарей, сортирующий их по валюте"""
     for i in list_:
-        if file_type == 'json':
+        if file_type == "json":
             if i["operationAmount"]["currency"]["code"] == currency.upper():
                 yield i
         else:
-            if i['currency_code'] == currency.upper():
+            if i["currency_code"] == currency.upper():
                 yield i
 
 
