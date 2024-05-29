@@ -14,10 +14,9 @@ def main_fail() -> str:
     """Возвращает строку, печатающуюся при неправильном обращении с программой"""
     return "Такой тип операции не поддерживается. Попробуйте ещё раз.\n"
 
-
-def main() -> None:
-    """Основная функция, содержащая все остальные"""
-    # Определение файла, с которым пользователь хотел бы работать в формате консольного приложения
+def file_format() -> tuple[list, str]:
+    '''Определение файла, с которым пользователь хотел бы работать в формате
+    консольного приложения'''
     print("Добро пожаловать в программу работы с банковскими транзакциями!")
     file = input(
         """Выберите формат файла:
@@ -26,70 +25,86 @@ def main() -> None:
     3. Excel\n"""
     )
     if file == "1":
-        file_type = "json"
         print("Для обработки выбран json файл.\n")
-        data = scr.utils.read_json("data/operations.json")
-    elif file == "2":
-        file_type = "csv"
+        return scr.utils.read_json("data/operations.json"), "json"
+    if file == "2":
         print("Для обработки выбран csv файл.\n")
-        data = scr.csv_xlsx_reader.csv_reader("data/transactions.csv")
-    elif file == "3":
-        file_type = "excel"
+        return scr.csv_xlsx_reader.csv_reader("data/transactions.csv"), "csv"
+    if file == "3":
         print("Для обработки выбран excel файл.\n")
-        data = scr.csv_xlsx_reader.excel_reader("data/transactions_excel.xlsx")
+        return scr.csv_xlsx_reader.excel_reader("data/transactions_excel.xlsx"), "excel"
     else:
         print(main_fail())
-        main()
+        file_format()
+        return [], ""
 
-    # Сортировка по статусу операции в виде консольного приложения
+def status_sort(data) -> list:
+    '''Сортировка по статусу операции в виде консольного приложения'''
     print("Выберите статус, по которому необходимо выполнить фильтрацию.")
     status = input("Доступные для сортировки статусы: EXECUTED, CANCELED, PENDING\n")
 
     if status.upper() not in ("EXECUTED", "CANCELED", "PENDING"):
         print(main_fail())
-        main()
-    data = scr.processing.sort_by_state(data, status)
+        status_sort(data)
+    return scr.processing.sort_by_state(data, status)
 
-    # Сортировка по дате в виде консольного приложения
+def date_sort(data) -> list:
+    '''Сортировка по дате в виде консольного приложения'''
     to_sort = input("Отсортировать операции по дате? Да/нет \n")
     if to_sort.lower() == "да":
         time = input("По возрастанию или по убыванию?\n")
         if time.lower() == "по возрастанию":
-            data = scr.processing.date_sort(data)
+            return scr.processing.date_sort(data)
         elif time.lower() == "по убыванию":
-            data = scr.processing.date_sort(data, "decreasing")
+            return scr.processing.date_sort(data, "decreasing")
         else:
             print(main_fail())
-            main()
+            date_sort(data)
+            return []
     elif to_sort.lower() == "нет":
-        pass
+        return data
     else:
         print(main_fail())
-        main()
+        date_sort(data)
+        return []
 
-    # Сортировка по валюте в виде консольного приложения
+def only_rub(data, file_type) -> list:
+    '''Сортировка по валюте в виде консольного приложения'''
     to_sort = input("Выводить только рублевые транзакции? Да/нет \n")
     if to_sort.lower() == "да":
         sorted_data = []
         for item in scr.generators.filter_by_currency(data, "RUB", file_type):
             sorted_data.append(item)
-        data = sorted_data
+        return sorted_data
     elif to_sort.lower() == "нет":
-        pass
+        return data
     else:
         print(main_fail())
-        main()
+        only_rub(data, file_type)
+        return []
 
-    # Сортировка по ключевым словам в описании в виде консольного приложения
+def word_sort(data) -> list:
+    '''Сортировка по ключевым словам в описании в виде консольного приложения'''
     to_sort = input("Отфильтровать список операций по определённому слову в описании? Да/нет\n")
     if to_sort.lower() == "да":
         to_find = input("Что вы хотели бы найти? \n")
-        data = scr.operation_handler.find_in_data(data, to_find)
+        return scr.operation_handler.find_in_data(data, to_find)
     elif to_sort.lower() == "нет":
-        pass
+        return data
     else:
         print(main_fail())
-        main()
+        word_sort(data)
+        return []
+
+
+def main() -> None:
+    """Основная функция, содержащая все остальные"""
+    # Определение файла, с которым пользователь хотел бы работать в формате консольного приложения
+    data, file_type = file_format()
+    data = status_sort(data)
+    data = date_sort(data)
+    data = only_rub(data, file_type)
+    data = word_sort(data)
 
     print("Распечатываю список транзакций...")
     if data and len(data) != 0:
