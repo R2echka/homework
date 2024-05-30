@@ -1,5 +1,5 @@
-from collections import defaultdict
-from typing import DefaultDict
+import re
+from collections import Counter
 
 
 def find_in_data(data: list, to_find: str) -> list:
@@ -7,17 +7,13 @@ def find_in_data(data: list, to_find: str) -> list:
     и возвращает список словарей, в описании которых есть эта строка"""
     sorted_data = []
     for operation in data:
-        if "description" in operation and to_find.lower() in operation["description"].lower():
+        if "description" in operation and re.search(to_find, operation["description"]):
             sorted_data.append(operation)
     return sorted_data
 
 
 def count_by_categories(data: list, categories: list) -> dict:
     """Принимает списки операций и категорий и возвращает словарь
-    с названием категории и количеством к ней относящихся операций"""
-    counted_dict: DefaultDict[str, int] = defaultdict(int)
-    for category in categories:
-        for operation in data:
-            if "description" in operation and operation["description"] == category:
-                counted_dict[category] += 1
-    return dict(counted_dict)
+    с названием категории и количеством относящихся к ней операций"""
+    counted_dict = Counter(operation["description"] for operation in data if "description" in operation)
+    return {category: counted_dict[category] for category in categories}

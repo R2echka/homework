@@ -47,7 +47,7 @@ def transaction_sum(transaction: dict, file_type: str = "json") -> float:
             currency = 1.0
         else:
             valute = transaction["currency_code"]
-            if data["Valute"][valute]:
+            if valute in data["Valute"]:
                 currency = data["Valute"][valute]["Value"]
             else:
                 currency = 1.0
