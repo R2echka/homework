@@ -31,7 +31,7 @@ def read_json(filename: str) -> list:
 
 def transaction_sum(transaction: dict, file_type: str = "json") -> float:
     """Принимает транзакцию и возвращает её сумму в рублях"""
-    response = requests.get("https://www.cbr-xml-daily.ru/daily_json.js", headers={"apikey": api_key}, timeout=3)
+    response = requests.get("https://www.cbr-xml-daily.ru/daily_json.js", headers={"apikey": api_key}, timeout=5)
     data = response.json()
     if file_type == "json":
         if transaction["operationAmount"]["currency"]["code"] == "RUB":

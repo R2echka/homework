@@ -12,8 +12,8 @@ def find_in_data(data: list, to_find: str) -> list:
     return sorted_data
 
 
-def count_by_categories(data: list, categories: list) -> dict:
+def count_by_categories(data: list, categories: dict) -> dict:
     """Принимает списки операций и категорий и возвращает словарь
     с названием категории и количеством относящихся к ней операций"""
     counted_dict = Counter(operation["description"] for operation in data if "description" in operation)
-    return {category: counted_dict[category] for category in categories}
+    return {category: counted_dict for category in categories.keys()}
